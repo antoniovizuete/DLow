@@ -61,8 +61,7 @@ export namespace DLow {
 
   export const run = async (flow: DLowFlow) => {
     let payload: PayloadType = {
-      ...(flow.props?.initialPayload || {}),
-      __executionId:v4.generate()
+      ...flow.props.initialPayload,
     };
     
     for (const child of flow.children) {
@@ -79,7 +78,7 @@ declare global {
     interface IntrinsicElements {
       flow: {
         name?: string;
-        initialPayload?: GenericType;
+        initialPayload: PayloadType;
       };
       task: {
         id?: string;

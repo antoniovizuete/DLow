@@ -1,5 +1,5 @@
 export type GenericType = { [key: string]: any };
-export type TaskFn = (payload: PayloadType) => PayloadType;
+export type TaskFn = (payload: PayloadType) => (PayloadType | Promise<PayloadType>);
 export type PayloadType = GenericType & {
   __executionId: string
 }
@@ -18,6 +18,6 @@ export type DLowTask = DLowType & {
 
 export type DLowFlow = DLowType & {
   props: GenericType & {
-    initialPayload?: PayloadType
+    initialPayload: PayloadType
   }
 };

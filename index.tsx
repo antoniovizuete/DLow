@@ -1,27 +1,35 @@
-import { DLow } from "./dlow/core/dlow.ts";
-import { DLowNode } from "./dlow/types/types.ts";
+import { DLow } from "./dlow/core/DLow.ts";
+import IntervalTask from "./dlow/std/IntervalTask.tsx";
+import TimeoutTask from "./dlow/std/TimeoutTask.tsx";
+import Flow from "./dlow/std/Flow.tsx";
 
-const taskExcutable = (name: string, payload: object) => {
-  console.log("Prueba " + name);
-  console.log("Payload", payload);
-  return {
-    ...payload,
-    name
-  };
-};
-
-const flow: DLowNode = (
-  <flow name="Flow" initialPayload={{ initDate: new Date().toUTCString()}} >
-    {["task1", "task2"].map(e => <task name={e} fn={async (payload) => taskExcutable(e, payload)} />)}
-    {["task3", "task4"].map(e => <task name={e} fn={async (payload) => taskExcutable(e, payload)} />)}
-    <task name="task5" fn={async (payload) => {
-      setTimeout(() => console.log("Task5") ,1000)
-      return {...payload, fin: true}
-    }} />
-    <task name="task6" fn={async (p) => taskExcutable("final", p)}>
-      Children?
-    </task>
-  </flow>
+const flow = (
+  <Flow name="Flow" initialPayload={{ foo: "bar", count: 1 }}>
+    <TimeoutTask
+      millis={5_000}
+      blocking={true}
+      fn={({payload}) => {
+        console.log("Execution delayed by 5s.");
+        return {...payload, delayed: true}
+      }}
+      />
+    <IntervalTask
+      name="IntervalTask"
+      millis={1_000}
+      fn={(payload) => {
+        console.log(payload.count);
+        payload.count = payload.count + 1;
+        payload.addedInterval = 1
+      }}
+    />
+    <TimeoutTask
+      millis={10_000}
+      fn={({clearingInterval,...payload}) => {
+        clearingInterval && clearingInterval();
+        console.log(payload);
+      }}
+      />
+  </Flow>
 );
 
 DLow.run(flow);
