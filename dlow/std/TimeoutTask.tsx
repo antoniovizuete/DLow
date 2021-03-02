@@ -5,7 +5,7 @@ import { GenericType, TaskFn, PayloadType } from "../core/types.ts";
 type TimeoutTaskProps = {
   name?: string;
   millis: number;
-  fn: (payload: GenericType) => (GenericType | void);
+  fn: (payload?: GenericType) => (GenericType | void);
   blocking?: boolean;
 };
 
@@ -13,17 +13,16 @@ const TimeoutTask = ({ name, millis, fn, blocking = false }: TimeoutTaskProps) =
 
   const taskFnNonBlocking: TaskFn = (payload) => {
     setTimeout(() => fn(payload), millis);
-    return { ...payload };
   };
-  const blockFor = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-  const taskBlocking: TaskFn = async (payload: PayloadType) => {
-    await blockFor(millis);
-    return { ...payload, ...fn(payload) } as PayloadType
+
+  const taskBlocking: TaskFn = async (payload) => {
+    await new Promise(resolve => setTimeout(resolve, millis));
+    return {...fn(payload)};
   }
 
   const taskFn: TaskFn = blocking ? taskBlocking : taskFnNonBlocking; 
 
-  return <task name={name ? name : v4.generate()} fn={taskFn} />;
+  return <task name={name} fn={taskFn} />;
 };
 
 export default TimeoutTask;

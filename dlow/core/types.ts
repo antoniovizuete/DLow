@@ -1,7 +1,7 @@
 export type GenericType = { [key: string]: any };
-export type TaskFn = (payload: PayloadType) => (PayloadType | Promise<PayloadType>);
+export type TaskFn = (payload?: PayloadType) => (PayloadType | Promise<PayloadType> | void);
 export type PayloadType = GenericType & {
-  __executionId: string
+  __executionId?: string
 }
 export type DLowType = {
   id: string;

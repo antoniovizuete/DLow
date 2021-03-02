@@ -5,7 +5,7 @@ import { GenericType, TaskFn } from "../core/types.ts";
 type IntervalTaskProps = {
   name?: string;
   millis: number;
-  fn: (payload: GenericType) => void;
+  fn: (payload?: GenericType) => void;
 };
 
 const IntervalTask = ({ millis, fn, name }: IntervalTaskProps) => {

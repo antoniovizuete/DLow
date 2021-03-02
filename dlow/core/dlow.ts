@@ -51,7 +51,7 @@ export namespace DLow {
   ): Promise<PayloadType> => {
     return new Promise((resolve, reject) => {
       try {
-        const result = fn(payload);
+        const result = fn(payload) || payload;
         resolve(result);
       } catch (error) {
         reject(error);
@@ -59,10 +59,15 @@ export namespace DLow {
     });
   };
 
+  let payload: PayloadType = {
+    __executionId: ""
+  }
+
+  export const getPayload = () => payload;
+  export const setPayload = (newPayload: PayloadType) => payload = {...payload, ...newPayload} 
+
   export const run = async (flow: DLowFlow) => {
-    let payload: PayloadType = {
-      ...flow.props.initialPayload,
-    };
+    setPayload(flow.props.initialPayload)
     
     for (const child of flow.children) {
       const tasks: DLowTask[] = Array.isArray(child)
@@ -82,7 +87,7 @@ declare global {
       };
       task: {
         id?: string;
-        name: string;
+        name?: string;
         fn: TaskFn;
         children?: never;
       };
