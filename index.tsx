@@ -10,30 +10,29 @@ const flow = (
       blocking={true}
       fn={(payload) => {
         console.log("Execution delayed by 1s.");
-        return {...payload, delayed: true}
+        return { ...payload, delayed: true };
       }}
-      />
+    />
     <IntervalTask
       name="IntervalTask"
       millis={1_000}
       fn={(payload) => {
-        if(payload) {
+        if (payload) {
           console.log(payload.count);
           payload.count = payload.count + 1;
           DLow.setPayload(payload);
         }
-        
       }}
     />
     <TimeoutTask
       millis={9_600}
       fn={() => {
         const payload = DLow.getPayload();
-        const {clearingInterval} = payload || {}
+        const { clearingInterval } = payload || {};
         clearingInterval && clearingInterval();
         console.log(payload);
       }}
-      />
+    />
   </Flow>
 );
 

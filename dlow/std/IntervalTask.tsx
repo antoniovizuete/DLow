@@ -1,21 +1,22 @@
-import { v4 } from "https://deno.land/std@0.88.0/uuid/mod.ts";
 import { DLow } from "../core/DLow.ts";
-import { GenericType, TaskFn } from "../core/types.ts";
+import { DLowComponent, DLowTaskFn } from "../core/types.ts";
 
 type IntervalTaskProps = {
   name?: string;
   millis: number;
-  fn: (payload?: GenericType) => void;
+  fn: DLowTaskFn;
 };
 
-const IntervalTask = ({ millis, fn, name }: IntervalTaskProps) => {
-  const taskFn: TaskFn = (payload) => {
+const IntervalTask: DLowComponent<IntervalTaskProps> = (
+  { millis, fn, name },
+) => {
+  const taskFn: DLowTaskFn = (payload) => {
     const interval = setInterval(() => fn(payload), millis);
     const clearingInterval = () => clearInterval(interval);
     return { ...payload, clearingInterval };
   };
 
-  return <task name={name ? name : v4.generate()} fn={taskFn} />;
+  return <task name={name} fn={taskFn} />;
 };
 
 export default IntervalTask;
