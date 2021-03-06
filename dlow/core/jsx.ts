@@ -3,8 +3,10 @@ import {
   DLowElement,
   DLowNode,
   DLowTaskFn,
-  DLowInitialPayloadType,
-} from "./types.ts";
+  DLowJSXFlow,
+  DLowJSXTask,
+  DLowJSXIntervalTask,
+} from "./DLow.ts";
 
 export function createElement<P extends {}>(
   type: DLowComponent<P> | string,
@@ -38,14 +40,9 @@ declare global {
       children: {};
     }
     interface IntrinsicElements {
-      flow: {
-        name?: string;
-        initialPayload?: DLowInitialPayloadType;
-      };
-      task: {
-        name?: string;
-        fn: DLowTaskFn;
-      };
+      flow: DLowJSXFlow;
+      task: DLowJSXTask;
+      "interval-task": DLowJSXIntervalTask;
     }
   }
 }

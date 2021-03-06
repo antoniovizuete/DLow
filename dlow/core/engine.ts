@@ -1,4 +1,4 @@
-import { DLowFlow, DLowPayload, DLowTask, DLowTaskFn } from "../core/types.ts";
+import { DLowFlow, DLowPayload, DLowTask, DLowTaskFn } from "./DLow.ts";
 
 let payload: DLowPayload = {
   __executionId: "",
