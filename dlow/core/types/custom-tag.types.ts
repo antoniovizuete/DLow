@@ -1,4 +1,5 @@
-import { PropsWithChildren, DLowElement } from "./dlow-internal.types.ts"
+import { PropsWithChildren } from "./dlow-internal.types.ts"
+import { DLowElement } from "./transpiled.types.ts"
 
 // Custom tags interface
 export interface DLowComponent<P = {}> {

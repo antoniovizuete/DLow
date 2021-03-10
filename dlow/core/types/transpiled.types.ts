@@ -1,12 +1,12 @@
 import { DLowInitialPayloadType, DLowPayload, DLowTaskFn } from "./common.types.ts";
-import { PropsWithChildren, DLowElement } from "./dlow-internal.types.ts";
+import { PropsWithRequiredChildrenOfType } from "./dlow-internal.types.ts";
 
 // Props types of transpiled JSX.IntrinsicElements
-type DLowFlowPropsType = PropsWithChildren<
+type DLowFlowPropsType = PropsWithRequiredChildrenOfType<
   DLowPayload & {
     initialPayload: DLowInitialPayloadType;
   }
->;
+,DLowTask[]>;
 
 type DLowTaskPropsType = DLowPayload & {
   fn: DLowTaskFn;
@@ -23,3 +23,15 @@ export type DLowIntervalTask = DLowElement<
   DLowIntervalTaskPropsType,
   "interval-task"
 >;
+
+// The most generic
+type JSXElementConstructor<P> = (props: P) => DLowElement | null;
+export interface DLowElement<
+  P = unknown,
+  T extends keyof JSX.IntrinsicElements | JSXElementConstructor<unknown> =
+    | keyof JSX.IntrinsicElements
+    | JSXElementConstructor<unknown>
+> {
+  type: T;
+  props: P;
+}

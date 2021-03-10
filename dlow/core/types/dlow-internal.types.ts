@@ -1,3 +1,5 @@
+import { DLowElement } from "./transpiled.types.ts";
+
 // DLow Types
 type DLowText = string | number;
 type DLowChild = DLowElement | DLowText;
@@ -5,16 +7,10 @@ type DLowChild = DLowElement | DLowText;
 // deno-lint-ignore no-empty-interface
 interface DLowNodeArray extends Array<DLowNode> {}
 type DLowFragment = {} | DLowNodeArray;
-type JSXElementConstructor<P> = (props: P) => DLowElement | null;
 
-export type PropsWithChildren<P> = P & { children?: DLowNode };
+type WithChildrenOfType<T> = {children?: T}
+
+export type PropsWithRequiredChildrenOfType<P, T> = P & Required<WithChildrenOfType<T>>
+export type PropsWithChildrenOfType<P, T> = P & WithChildrenOfType<T>
+export type PropsWithChildren<P> = PropsWithChildrenOfType<P, DLowNode>;
 export type DLowNode = DLowChild | DLowFragment | boolean | null | undefined;
-export interface DLowElement<
-  P = any,
-  T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any> =
-    | keyof JSX.IntrinsicElements
-    | JSXElementConstructor<any>
-> {
-  type: T;
-  props: P;
-}

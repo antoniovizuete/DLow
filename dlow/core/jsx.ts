@@ -2,7 +2,6 @@ import {
   DLowComponent,
   DLowElement,
   DLowNode,
-  DLowTaskFn,
   DLowJSXFlow,
   DLowJSXTask,
   DLowJSXIntervalTask,

@@ -9,6 +9,14 @@ const flow: DLowFlow = (
   </flow>
 );
 
+const flow2: DLowFlow = (
+  <flow name="flow">
+    <flow name="int-flow"><task name="task" fn={() => console.log("task!!")} /></flow>
+  </flow>
+);
+
+DLow.run(flow2);
+
 const flow1: DLowFlow = (
   <flow name="flow">
     <interval-task

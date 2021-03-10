@@ -1,4 +1,4 @@
-import { DLowFlow, DLowPayload, DLowTask, DLowTaskFn } from "./DLow.ts";
+import { DLowFlow, DLowPayload, DLowTask, DLowTaskFn, DLowElement } from "./DLow.ts";
 
 let payload: DLowPayload = {
   __executionId: "",
@@ -10,6 +10,8 @@ export const setPayload = (
 ) => (payload = { ...payload, ...newPayload });
 
 export const run = async (flow: DLowFlow) => {
+  validateFlow(flow);
+
   setPayload(flow.props.initialPayload);
   if (Array.isArray(flow.props.children)) {
     for (const child of flow.props.children) {
@@ -46,3 +48,17 @@ const executeAsync = (
     }
   });
 };
+
+
+export const validateFlow = (flow: DLowFlow) => {
+  const children = flow.props.children
+  if (children) {
+    if (children.some(child => !isDLowTask(child))){
+      throw Error(`Flow is not valid, some children are not Task.\n ${JSON.stringify(flow)}`);
+    }
+  }
+}
+
+const isDLowTask = (element: DLowElement<any>): element is DLowTask => {
+  return 'fn' in element.props;
+}
